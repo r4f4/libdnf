@@ -39,12 +39,13 @@ BuildRequires:  valgrind
 %endif
 BuildRequires:  pkgconfig(gio-unix-2.0) >= 2.46.0
 BuildRequires:  pkgconfig(gtk-doc)
-BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  rpm-devel >= 4.11.0
 %if %{with rhsm}
 BuildRequires:  pkgconfig(librhsm)
 %endif
 BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(jsoncpp)
+BuildRequires:  pkgconfig(cppunit)
 
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 
@@ -64,6 +65,7 @@ Development files for %{name}.
 Summary:        Python 2 bindings for the libdnf library.
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  python2-devel
+BuildRequires:  python2-sphinx
 BuildRequires:  swig
 
 %description -n python2-%{name}
@@ -77,6 +79,7 @@ Summary:        Python 3 bindings for the libdnf library.
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig
+BuildRequires:  python3-sphinx
 
 %description -n python3-%{name}
 Python 3 bindings for the libdnf library.
@@ -87,20 +90,10 @@ Python 3 bindings for the libdnf library.
 Summary:        Python 2 bindings for the hawkey library
 %{?python_provide:%python_provide python2-hawkey}
 BuildRequires:  python2-devel
-BuildRequires:  pygobject3-devel
 %if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:  python-nose
-BuildRequires:  python-gobject
-Requires:       python-gobject
 %else
 BuildRequires:  python2-nose
-%if 0%{?fedora} && 0%{?fedora} <= 26
-BuildRequires:  python-gobject-base
-Requires:       python-gobject-base
-%else
-BuildRequires:  python2-gobject-base
-Requires:       python2-gobject-base
-%endif
 %endif
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 # Fix problem with hawkey - dnf version incompatibility
@@ -118,9 +111,6 @@ Summary:        Python 3 bindings for the hawkey library
 %{?python_provide:%python_provide python3-hawkey}
 BuildRequires:  python3-devel
 BuildRequires:  python3-nose
-BuildRequires:  python3-gobject-base
-BuildRequires:  pygobject3-devel
-Requires:       python3-gobject-base
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 # Fix problem with hawkey - dnf version incompatibility
 # Can be deleted for distros where only python3-dnf >= 2.0.0
@@ -158,9 +148,7 @@ Please build the package as non-root user.
 ERROR
         exit 1
 fi
-# for SWDB testing
-export GI_TYPELIB_PATH=%{buildroot}%{_libdir}/girepository-1.0
-export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
+
 pushd build-py2
   make ARGS="-V" test
 popd
@@ -189,14 +177,12 @@ popd
 %license COPYING
 %doc README.md AUTHORS NEWS
 %{_libdir}/%{name}.so.*
-%{_libdir}/girepository-1.0/Dnf-*.typelib
 
 %files devel
 %doc %{_datadir}/gtk-doc/html/%{name}/
 %{_libdir}/%{name}.so
 %{_libdir}/pkgconfig/%{name}.pc
 %{_includedir}/%{name}/
-%{_datadir}/gir-1.0/Dnf-*.gir
 
 %files -n python2-libdnf
 %{python2_sitearch}/libdnf/
