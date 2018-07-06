@@ -48,8 +48,10 @@ dnf_module_dummy(const std::vector<std::string> & module_list)
 bool
 dnf_module_enable(const std::vector<std::string> & module_list)
 {
+    ModuleExceptionList exceptions;
+
     if (module_list.empty()) {
-        throw std::runtime_error("module_list cannot be null");
+        throw ModuleCommandException("module_list cannot be null");
     }
 
     for (const auto& module_spec : module_list) {
@@ -70,7 +72,9 @@ dnf_module_enable(const std::vector<std::string> & module_list)
 
         /* FIXME: throw exception? */
         if (!is_spec_valid) {
-            std::cerr << "Invalid spec \"" << module_spec << "\"" << std::endl;
+            std::ostringstream oss;
+            oss << module_spec << " is not a valid spec";
+            exceptions.push_back(ModuleCommandException(oss.str()));
             continue;
         }
 
@@ -85,12 +89,13 @@ dnf_module_enable(const std::vector<std::string> & module_list)
 
         /* FIXME: enable module */
 
-        /* FIXME: apply filter_modules
-        dnf_sack_filter_modules(...);
+        /* FIXME: where are we getting sack, repos and install_root from?
+        dnf_sack_filter_modules(sack, repos, install_root);
         */
-
-        /* FIXME: throw exception in case of failure */
     }
+
+    if (!exceptions.empty())
+        throw ModuleException(exceptions);
 
     return true;
 }
