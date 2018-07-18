@@ -8,7 +8,6 @@
 class ModuleTest : public CppUnit::TestCase
 {
     CPPUNIT_TEST_SUITE(ModuleTest);
-        CPPUNIT_TEST(testDummy);
         CPPUNIT_TEST(testEnable);
     CPPUNIT_TEST_SUITE_END();
 
@@ -16,8 +15,11 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    void testDummy();
     void testEnable();
+
+private:
+    DnfContext *context;
+    GPtrArray *repos;
 };
 
 #endif //LIBDNF_MODULETEST_HPP

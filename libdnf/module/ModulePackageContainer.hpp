@@ -39,6 +39,7 @@ public:
     void add(const std::vector<std::shared_ptr<ModulePackage>> &packages);
     void add(const std::map<Id, std::shared_ptr<ModulePackage>> &packages);
     std::shared_ptr<ModulePackage> getModulePackage(Id id);
+    std::shared_ptr<ModulePackage> getModulePackage(const std::string &name);
     std::vector<std::shared_ptr<ModulePackage>> getModulePackages();
 
     void enable(const std::string &name, const std::string &stream);

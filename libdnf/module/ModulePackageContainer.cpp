@@ -37,6 +37,17 @@ std::shared_ptr<ModulePackage> ModulePackageContainer::getModulePackage(Id id)
     return modules[id];
 }
 
+std::shared_ptr<ModulePackage> ModulePackageContainer::getModulePackage(const std::string &name)
+{
+    for (auto & iter : modules) {
+        std::shared_ptr<ModulePackage> modPkg = iter.second;
+        if (modPkg->getName() == name)
+            return modPkg;
+    }
+
+    throw ModulePackageContainer::NoModuleException(name);
+}
+
 void ModulePackageContainer::enable(const std::string &name, const std::string &stream)
 {
     for (const auto &iter : modules) {

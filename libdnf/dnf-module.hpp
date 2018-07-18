@@ -33,7 +33,7 @@ namespace libdnf {
 struct ModuleCommandException : public std::runtime_error {
     explicit ModuleCommandException(const std::string &what) : std::runtime_error(what) {}
 };
-    
+
 typedef std::vector<ModuleCommandException> ModuleExceptionList;
 
 class ModuleException : public std::exception {
@@ -47,7 +47,7 @@ private:
 };
 
 bool dnf_module_dummy(const std::vector<std::string> & module_list);
-bool dnf_module_enable(const std::vector<std::string> & module_list);
+bool dnf_module_enable(const std::vector<std::string> &spec_list, DnfSack *sack, GPtrArray *repos, const char *install_root);
 
 }
 
