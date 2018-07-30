@@ -14,6 +14,7 @@ void PackageTest::setUp()
     repo_finalize_init(repo, repo_create(dnf_sack_get_pool(sack), "repo"));
     dnf_sack_load_repo(sack, repo, 0, &error);
     package = std::unique_ptr<PackageInstantiable>(new PackageInstantiable(sack, repo, "rpm", "1.0", "x86_64"));
+    g_error_free(error);
 }
 
 void PackageTest::tearDown()
